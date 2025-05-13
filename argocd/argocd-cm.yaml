@@ -5,6 +5,6 @@ metadata:
   namespace: argocd
 data:
   repositories: |
-    - url:
+    - url: https://github.com/Hima0206/DevOps-assessment.git
       type: git
       name: rails-app 
