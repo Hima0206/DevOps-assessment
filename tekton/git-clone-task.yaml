@@ -4,7 +4,7 @@ metadata:
   name: git-clone
 spec:
   params:
-    - name: https://github.com/Hima0206/DevOps-assessment.git
+    - name: url
       type: string
       description: The URL of the Git repository to clone.
     - name: revision
