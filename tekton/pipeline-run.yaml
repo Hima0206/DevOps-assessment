@@ -7,9 +7,9 @@ spec:
     name: rails-build-pipeline
   params:
     - name: git-repo
-      value:
+      value: https://github.com/Hima0206/DevOps-assessment.git
     - name: image url
-      value:
+      value: docker.io/himateja0206/rails-app:latest
   workspaces:
     - name: source
       volumeClaimTemplates:
