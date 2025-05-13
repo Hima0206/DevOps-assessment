@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: rails-container
-          image: your-dockerhub-username/rails-app:latest
+          image: himateja0206/rails-app:latest
           ports:
             - containerPort: 3000
           env:
