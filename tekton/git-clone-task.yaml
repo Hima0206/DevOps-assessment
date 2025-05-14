@@ -10,10 +10,13 @@ spec:
     - name: revision
       type: string
       description: The Git revision (branch, tag, commit) to check out.
-      default: master
-    - name: subdirectories
+      default: "main"
+    - name: subdirectory
       type: string
       default: ""
+  workspaces:
+    - name: output
+      description: The workspace where the repository will be cloned
   steps:
     - name: git-clone
       image: alpine/git
