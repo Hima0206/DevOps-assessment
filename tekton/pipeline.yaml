@@ -10,7 +10,7 @@ spec:
     - name: image url
       type: string
       description: The URL of the image to build.
-  workspace:
+  workspaces:
     - name: source
       description: The workspace containing the source code.
   tasks:
