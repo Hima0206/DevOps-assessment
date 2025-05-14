@@ -24,10 +24,10 @@ spec:
         - name: credentials.username
           valueFrom:
             secretKeyRef:
-              name: github-creds
+              name: github-auth-secret
               key: username
         - name: credentials.password
           valueFrom:
             secretKeyRef:
-              name: github-auth-secrets
+              name: github-auth-secret
               key: password
