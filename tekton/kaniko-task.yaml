@@ -6,35 +6,15 @@ spec:
   params:
     - name: IMAGE
       type: string
-      description: The name of the image to build.
-    - name: DOCKERFILE
-      type: string
-      description: The path to the Dockerfile.
-      default: Dockerfile
-    - name: CONTEXT
-      type: string
-      description: The build context.
-      default: .
-    - name: CACHE
-      type: string
-      description: The cache directory.
-      default: /cache
   workspaces:
     - name: source
       description: The workspace containing the source code.
   steps:
-    - name: kaniko
+    - name: build-and-push
       image: gcr.io/kaniko-project/executor:latest
-      env :
+      env:
         - name: DOCKER_CONFIG
-          value: /kaniko/.docker/
+          value: /tekton/home/.docker/
       script: |
         #!/busybox/sh
-        mkdir -p /kaniko/.docker
-        echo "{\"credHelpers\":{\"gcr.io\":\"gcr\"}}" > /kaniko/.docker/config.json
-        cp $(workspaces.source.path)/.docker/config.json /kaniko/.docker/config.json
-        /kaniko/executor --context $(workspaces.source.path)/$(params.CONTEXT) \
-          --dockerfile $(workspaces.source.path)/$(params.DOCKERFILE) \
-          --destination $(params.IMAGE) \
-          --cache=true \
-          --cache-dir=$(workspaces.source.path)/$(params.CACHE)
+        /kaniko/executor           --dockerfile=$(workspaces.source.path)/Dockerfile           --context=$(workspaces.source.path)           --destination=$(params.IMAGE)           --insecure
