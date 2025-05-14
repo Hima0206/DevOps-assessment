@@ -1,5 +1,5 @@
 apiVersion: tekton.dev/v1beta1
-kind: pipelinerun
+kind: PipelineRun
 metadata:
   name: rails-pipeline-run
 spec:
@@ -8,10 +8,15 @@ spec:
   params:
     - name: git-repo
       value: https://github.com/Hima0206/DevOps-assessment.git
-    - name: image url
-      value: docker.io/himateja0206/my-app/general
+    - name: image-url
+      value: docker.io/himateja0206/my-app:latest
   workspaces:
-    - name:  shared-workspace
-      persistentVolumeClaim:
-        claimName: shared-pvcsource
-      
+    - name: source
+      volumeClaimTemplate:
+        metadata:
+          name: shared-pvc
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
