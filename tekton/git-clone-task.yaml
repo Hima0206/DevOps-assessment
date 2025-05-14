@@ -6,20 +6,28 @@ spec:
   params:
     - name: url
       type: string
-      description: The URL of the Git repository to clone.
     - name: revision
       type: string
       default: "main"
-      description: The Git revision (branch, tag, commit) to check out.
     - name: subdirectory
       type: string
       default: ""
   workspaces:
     - name: output
-      description: The workspace where the repository will be cloned
   steps:
     - name: git-clone
       image: alpine/git
       script: |
         #!/bin/sh
-        git clone -b $(params.revision) $(params.url) $(workspaces.output.path)/$(params.subdirectory)
+        git clone https://$(credentials.username):$(credentials.password)@$(params.url | sed 's|https://||') $(workspaces.output.path)/$(params.subdirectory)
+      env:
+        - name: credentials.username
+          valueFrom:
+            secretKeyRef:
+              name: github-creds
+              key: username
+        - name: credentials.password
+          valueFrom:
+            secretKeyRef:
+              name: github-auth-secrets
+              key: password
