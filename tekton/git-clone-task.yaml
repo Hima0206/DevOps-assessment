@@ -18,8 +18,13 @@ spec:
     - name: git-clone
       image: alpine/git
       script: |
-        #!/bin/sh
-        git clone https://$(credentials.username):$(credentials.password)@$(params.url | sed 's|https://||') $(workspaces.output.path)/$(params.subdirectory)
+        #!/bin/bash
+        echo "Cloning repository..."
+        cd $(workspaces.output.path)
+
+        # Strip https:// from the URL manually
+        CLEAN_URL=$(echo "$(params.url)" | sed 's|https://||')
+        git clone -b $(params.revision) https://$(params.GIT_USERNAME):$(params.GIT_PASSWORD)@$CLEAN_URL $(params.subdirectory)
       env:
         - name: credentials.username
           valueFrom:
