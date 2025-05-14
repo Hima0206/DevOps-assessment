@@ -11,12 +11,7 @@ spec:
     - name: image url
       value: docker.io/himateja0206/rails-app:latest
   workspaces:
-    - name: source
-      volumeClaimTemplates:
-        - metadata:
-            name: source
-          spec:
-            accessModes: ["ReadWriteOnce"]
-            resources:
-              requests:
-                storage: 1Gi 
+    - name:  shared-workspace
+      persistentVolumeClaim:
+        claimName: shared-pvcsource
+      
