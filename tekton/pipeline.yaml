@@ -1,13 +1,13 @@
 apiVersion: tekton.dev/v1beta1
-kind: pipeline
+kind: Pipeline
 metadata:
-  name: rails-pipeline
+  name: rails-build-pipeline
 spec:
   params:
     - name: git-repo
       type: string
       description: The URL of the Git repository to clone.
-    - name: image url
+    - name: image-url
       type: string
       description: The URL of the image to build.
   workspaces:
@@ -28,8 +28,7 @@ spec:
         name: kaniko
       params:
         - name: IMAGE
-          value: $(params.image url)
+          value: $(params.image-url)
       workspaces:
         - name: source
           workspace: source
-      
