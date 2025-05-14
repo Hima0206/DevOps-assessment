@@ -9,7 +9,7 @@ spec:
     - name: git-repo
       value: https://github.com/Hima0206/DevOps-assessment.git
     - name: image url
-      value: docker.io/himateja0206/rails-app:latest
+      value: docker.io/himateja0206/my-app/general
   workspaces:
     - name:  shared-workspace
       persistentVolumeClaim:
