@@ -14,5 +14,5 @@ spec:
   workspaces:
     - name: source
       persistentVolumeClaim:
-          claimname: shared
+          claimName: shared
         
