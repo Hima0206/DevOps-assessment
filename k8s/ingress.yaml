@@ -4,8 +4,6 @@ metadata:
   name: rails-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/use-http2: "true"
-rewrite-target: /
 spec:
   rules:
     - host: rails-app.local
