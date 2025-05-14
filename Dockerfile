@@ -5,6 +5,7 @@ RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
 # Set the working directory
 WORKDIR /myapp
+COPY . /app
 COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
 
