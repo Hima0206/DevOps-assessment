@@ -9,19 +9,17 @@ spec:
       description: The URL of the Git repository to clone.
     - name: revision
       type: string
+      default: "main"
       description: The Git revision (branch, tag, commit) to check out.
-      default: main
-    - name: output
-      type: string
-      description: The name of the output workspace.
-      default: output
-    - name: subdirectory 
+    - name: subdirectory
       type: string
       default: ""
+  workspaces:
+    - name: output
+      description: The workspace where the repository will be cloned
   steps:
     - name: git-clone
       image: alpine/git
       script: |
         #!/bin/sh
-        git clone -b $(params.revision) $(params.url) $(workspaces.output.path)/ ${params.subdirectories}
-
+        git clone -b $(params.revision) $(params.url) $(workspaces.output.path)/$(params.subdirectory)
