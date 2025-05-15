@@ -6,15 +6,29 @@ spec:
   params:
     - name: IMAGE
       type: string
+    - name: DOCKERFILE
+      type: string
+      default: ./Dockerfile
+    - name: CONTEXT
+      type: string
+      default: ./
+  results:
+    - name: IMAGE_DIGEST
+      type: string
+    - name: IMAGE_URL
+      type: string
   workspaces:
     - name: source
-      description: The workspace containing the source code.
+      description: Contains source and Dockerfile
   steps:
     - name: build-and-push
-      image: gcr.io/kaniko-project/executor:latest
-      env:
-        - name: DOCKER_CONFIG
-          value: /tekton/home/.docker/
-      script: |
-        #!/busybox/sh
-        /kaniko/executor           --dockerfile=$(workspaces.source.path)/Dockerfile           --context=$(workspaces.source.path)           --destination=$(params.IMAGE)           --insecure
+      image: gcr.io/kaniko-project/executor:v1.5.1
+      workingDir: /workspace/source
+      args:
+        - '--dockerfile=/workspace/source/Dockerfile'
+        - '--context=/workspace/source'
+        - '--destination=docker.io/himateja0206/rails-app:latest'
+        - '--digest-file=/tekton/results/IMAGE_DIGEST'
+        - '--cache=true'
+      securityContext:
+        runAsUser: 0
