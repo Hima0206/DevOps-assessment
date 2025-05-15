@@ -1,18 +1,25 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: rails-pipeline-run
+  name: build-run-manual
 spec:
-  serviceAccountName: git-serviceaccount
   pipelineRef:
-    name: rails-build-pipeline
+    name: build-pipeline
   params:
-    - name: git-repo
+    - name: git-url
       value: https://github.com/Hima0206/DevOps-assessment.git
     - name: image-url
-      value: docker.io/himateja0206/my-app:latest
+      value: docker.io/himateja0206/rails-app:latest
   workspaces:
-    - name: source
-      persistentVolumeClaim:
-          claimName: shared
+    - name: shared-workspace
+      volumeClaimTemplate:
+        metadata:
+          name: shared-pvc
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
+  serviceAccountName: default
+
         
