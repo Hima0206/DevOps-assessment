@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+piVersion: apps/v1
 kind: Deployment
 metadata:
   name: rails-app
@@ -20,3 +20,4 @@ spec:
           env:
             - name: DATABASE_URL
               value: postgres://user:password@postgres:5432/myapp_development
+
