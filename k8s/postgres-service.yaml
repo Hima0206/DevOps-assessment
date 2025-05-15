@@ -4,13 +4,11 @@ metadata:
   name: postgres
   labels:
     app: postgres
-
   ports:  
     - port: 5432
   selector:
     app: postgres
-  type: ClusterIP
-  clusterIP: None   
+    
   
   # This is a headless service, which means it doesn't have a cluster IP.
   # It allows direct access to the pods without going through a load balancer.
