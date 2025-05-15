@@ -8,7 +8,7 @@ spec:
   rules:
     - host: rails-app.local
       http:
-        paths:      
+        paths:
         - path: /
           pathType: Prefix
           backend:
