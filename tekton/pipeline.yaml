@@ -1,34 +1,35 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: rails-build-pipeline
+  name: build-pipeline
 spec:
   params:
-    - name: git-repo
-      type: string
-      description: The URL of the Git repository to clone.
+    - name: git-url
     - name: image-url
-      type: string
-      description: The URL of the image to build.
   workspaces:
-    - name: source
-      description: The workspace containing the source code.
+    - name: shared-workspace
   tasks:
-    - name: fetch-repo
+    - name: clone
       taskRef:
         name: git-clone
       params:
         - name: url
-          value: $(params.git-repo)
+          value: $(params.git-url)
       workspaces:
         - name: output
-          workspace: source
+          workspace: shared-workspace
     - name: build-and-push
       taskRef:
-        name: kaniko
+        name: kaniko-build
+      runAfter: ["clone"]
       params:
         - name: IMAGE
           value: $(params.image-url)
+        - name: CONTEXT
+          value: /workspace/shared-workspace
+        - name: DOCKERFILE
+          value: /workspace/shared-workspace/Dockerfile
       workspaces:
         - name: source
-          workspace: source
+          workspace: shared-workspace
+
