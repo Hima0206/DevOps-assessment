@@ -16,18 +16,20 @@ spec:
         #!/bin/sh
         echo ">> DEBUG: Listing files in workspace"
         find $(workspaces.source.path)
-
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:latest
-      env:
-        - name: HTTP_PROXY
-          value: https://127.0.0.1:8080
-        - name: HTTPS_PROXY
-          value: https://127.0.0.1:8080
       command:
         - /kaniko/executor
       args:
-        - --dockerfile=$(workspaces.source.path)/Dockerfile
-        - --context=$(workspaces.source.path)
+        - --dockerfile=/workspace/source/Dockerfile
+        - --context=/workspace/source
         - --destination=$(params.IMAGE)
         - --insecure
+        - --skip-tls-verify
+      volumeMounts:
+        - name: docker-config
+          mountPath: /kaniko/.docker
+  volumes:
+    - name: docker-config
+      secret:
+        secretName: dockerhub-secret
