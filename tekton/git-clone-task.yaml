@@ -17,4 +17,7 @@ spec:
       command: ["/bin/sh", "-c"]
       args:
         - |
+          echo "Cleaning output directory..."
+          rm -rf /workspace/output/*
+          echo "Cloning repo..."
           git clone --branch $(params.revision) $(params.url) /workspace/output
