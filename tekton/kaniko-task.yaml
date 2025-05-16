@@ -16,20 +16,22 @@ spec:
         #!/bin/sh
         echo ">> DEBUG: Listing files in workspace"
         find $(workspaces.source.path)
+
     - name: build-and-push
-        image: gcr.io/kaniko-project/executor:latest
-        command:
-          - /kaniko/executor
-        args:
-          - --dockerfile=/workspace/source/Dockerfile
-          - --context=/workspace/source
-          - --destination=$(params.IMAGE)
-          - --insecure
-          - --skip-tls-verify
-        volumeMounts:
-          - name: docker-config
-            mountPath: /kaniko/.docker
-      volumes:
+      image: gcr.io/kaniko-project/executor:latest
+      command:
+        - /kaniko/executor
+      args:
+        - --dockerfile=/workspace/source/Dockerfile
+        - --context=/workspace/source
+        - --destination=$(params.IMAGE)
+        - --insecure
+        - --skip-tls-verify
+      volumeMounts:
         - name: docker-config
-          secret:
-            secretName: dockerhub-secret
+          mountPath: /kaniko/.docker
+
+  volumes:
+    - name: docker-config
+      secret:
+        secretName: dockerhub-secret
