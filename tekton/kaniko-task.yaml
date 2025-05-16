@@ -19,11 +19,10 @@ spec:
 
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:latest
-      script: |
-        #!/busybox/sh
-        echo ">> Building Docker image..."
-        /kaniko/executor \
-          --dockerfile=$(workspaces.source.path)/DevOps-assessment/Dockerfile \
-          --context=$(workspaces.source.path)/DevOps-assessment \
-          --destination=$(params.IMAGE) \
-          --insecure
+      command:
+        - /kaniko/executor
+      args:
+        - --dockerfile=$(workspaces.source.path)/Dockerfile
+        - --context=$(workspaces.source.path)
+        - --destination=$(params.IMAGE)
+        - --insecure
