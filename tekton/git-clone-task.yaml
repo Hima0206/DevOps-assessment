@@ -1,30 +1,38 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: kaniko
+  name: git-clone
 spec:
   params:
-    - name: IMAGE
+    - name: url
       type: string
+    - name: revision
+      type: string
+      default: "main"
+    - name: subdirectory
+      type: string
+      default: ""
   workspaces:
-    - name: source
-      description: The workspace containing the source code.
+    - name: output
   steps:
-    - name: debug-path
-      image: alpine
+    - name: git-clone
+      image: alpine/git
       script: |
-        #!/bin/sh
-        echo ">> DEBUG: Listing files in workspace"
-        find $(workspaces.source.path)
+        #!/bin/bash
+        echo "Cloning repository..."
+        cd $(workspaces.output.path)
 
-    - name: build-and-push
-      image: gcr.io/kaniko-project/executor:latest
-      script: |
-        #!/busybox/sh
-        echo ">> Building Docker image..."
-        /kaniko/executor \
-          --dockerfile=$(workspaces.source.path)/DevOps-assessment/Dockerfile \
-          --context=$(workspaces.source.path)/DevOps-assessment \
-          --destination=$(params.IMAGE) \
-          --insecure
-
+        # Strip https:// from the URL manually
+        CLEAN_URL=$(echo "$(params.url)" | sed 's|https://||')
+        git clone -b $(params.revision) https://$(params.GIT_USERNAME):$(params.GIT_PASSWORD)@$CLEAN_URL $(params.subdirectory)
+      env:
+        - name: credentials.username
+          valueFrom:
+            secretKeyRef:
+              name: github-auth-secret
+              key: username
+        - name: credentials.password
+          valueFrom:
+            secretKeyRef:
+              name: github-auth-secret
+              key: password
