@@ -19,6 +19,11 @@ spec:
 
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:latest
+      env:
+        - name: HTTP_PROXY
+          value: http://your-proxy:port
+        - name: HTTPS_PROXY
+          value: http://your-proxy:port
       command:
         - /kaniko/executor
       args:
