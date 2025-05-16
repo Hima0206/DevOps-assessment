@@ -21,9 +21,9 @@ spec:
       image: gcr.io/kaniko-project/executor:latest
       env:
         - name: HTTP_PROXY
-          value: http://your-proxy:port
+          value: https://127.0.0.1:8080
         - name: HTTPS_PROXY
-          value: http://your-proxy:port
+          value: https://127.0.0.1:8080
       command:
         - /kaniko/executor
       args:
