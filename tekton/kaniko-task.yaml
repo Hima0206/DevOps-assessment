@@ -6,29 +6,24 @@ spec:
   params:
     - name: IMAGE
       type: string
-    - name: DOCKERFILE
-      type: string
-      default: ./Dockerfile
-    - name: CONTEXT
-      type: string
-      default: ./
-  results:
-    - name: IMAGE_DIGEST
-      type: string
-    - name: IMAGE_URL
-      type: string
   workspaces:
     - name: source
-      description: Contains source and Dockerfile
+      description: The workspace containing the source code.
   steps:
+    - name: debug-path
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo ">> DEBUG: Listing files in workspace"
+        find $(workspaces.source.path)
+
     - name: build-and-push
-      image: gcr.io/kaniko-project/executor:v1.5.1
-      workingDir: /workspace/source
-      args:
-        - '--dockerfile=/workspace/source/Dockerfile'
-        - '--context=/workspace/source'
-        - '--destination=docker.io/himateja0206/rails-app:latest'
-        - '--digest-file=/tekton/results/IMAGE_DIGEST'
-        - '--cache=true'
-      securityContext:
-        runAsUser: 0
+      image: gcr.io/kaniko-project/executor:latest
+      script: |
+        #!/busybox/sh
+        echo ">> Building Docker image..."
+        /kaniko/executor \
+          --dockerfile=$(workspaces.source.path)/DevOps-assessment/Dockerfile \
+          --context=$(workspaces.source.path)/DevOps-assessment \
+          --destination=$(params.IMAGE) \
+          --insecure
