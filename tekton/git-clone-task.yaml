@@ -8,31 +8,13 @@ spec:
       type: string
     - name: revision
       type: string
-      default: "main"
-    - name: subdirectory
-      type: string
-      default: ""
+      default: main
   workspaces:
     - name: output
   steps:
-    - name: git-clone
+    - name: clone
       image: alpine/git
-      script: |
-        #!/bin/bash
-        echo "Cloning repository..."
-        cd $(workspaces.output.path)
-
-        # Strip https:// from the URL manually
-        CLEAN_URL=$(echo "$(params.url)" | sed 's|https://||')
-        git clone -b $(params.revision) https://$(params.GIT_USERNAME):$(params.GIT_PASSWORD)@$CLEAN_URL $(params.subdirectory)
-      env:
-        - name: credentials.username
-          valueFrom:
-            secretKeyRef:
-              name: github-auth-secret
-              key: username
-        - name: credentials.password
-          valueFrom:
-            secretKeyRef:
-              name: github-auth-secret
-              key: password
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          git clone --branch $(params.revision) $(params.url) /workspace/output
