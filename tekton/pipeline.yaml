@@ -20,6 +20,10 @@ spec:
       params:
         - name: url
           value: $(params.git-repo)
+        - name: revision
+          value: main
+        - name: subdirectory
+          value: ""
         - name: deleteExisting
           value: "true"
       workspaces:
